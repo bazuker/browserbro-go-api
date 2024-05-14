@@ -5,7 +5,7 @@ import (
 	"math/rand/v2"
 	"sync"
 
-	"github.com/bazuker/browserbroAPI/client"
+	"github.com/bazuker/browserbro-go-api/client"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module github.com/bazuker/browserbroAPI
+module github.com/bazuker/browserbro-go-api
 
 go 1.22
 
