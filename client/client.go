@@ -65,7 +65,7 @@ func (c *Client) Plugins() ([]string, error) {
 
 // RunPlugin runs a plugin with the given name and parameters.
 // It returns a result of the plugin execution.
-func (c *Client) RunPlugin(pluginName string, params map[string]any) (map[string]interface{}, error) {
+func (c *Client) RunPlugin(pluginName string, params map[string]any) (map[string]any, error) {
 	body, err := json.Marshal(params)
 	if err != nil {
 		return nil, fmt.Errorf("failed to JSON encode params: %w", err)
@@ -89,7 +89,7 @@ func (c *Client) RunPlugin(pluginName string, params map[string]any) (map[string
 		)
 	}
 
-	var output map[string]interface{}
+	var output map[string]any
 	if err := json.NewDecoder(resp.Body).Decode(&output); err != nil {
 		return nil, fmt.Errorf("failed to decode plugin output: %w", err)
 	}
