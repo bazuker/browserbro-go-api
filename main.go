@@ -73,7 +73,8 @@ func runPlugin(c *client.Client, pluginName string, params map[string]any) (map[
 }
 
 // downloadScreenshots downloads every file referenced by the screenshot plugin
-// output and saves it in the current directory under its server-side name.
+// output, saves it in the current directory under its server-side name, and
+// deletes it from the server once it is safely on disk.
 func downloadScreenshots(c *client.Client, output map[string]any) error {
 	result, ok := output["screenshot"].(map[string]any)
 	if !ok {
@@ -100,6 +101,14 @@ func downloadScreenshots(c *client.Client, output map[string]any) error {
 			return fmt.Errorf("failed to save %s: %w", name, err)
 		}
 		fmt.Printf("saved %s (%d bytes)\n", name, len(data))
+
+		// The local copy is safe at this point, so a failed cleanup only
+		// leaves a stale file on the server and must not stop the rest.
+		if err := c.DeleteFile(fileID); err != nil {
+			fmt.Printf("warning: failed to delete %s from the server: %v\n", fileID, err)
+			continue
+		}
+		fmt.Printf("deleted %s from the server\n", fileID)
 	}
 
 	return nil
